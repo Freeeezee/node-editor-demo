@@ -20,13 +20,13 @@ export const computeGraph = (
 
     for (const node of sorted) {
         const incoming = edges.filter(e => e.target === node.id);
-        if (incoming.length === 0) continue;
 
         const inputs = incoming
             .reduce<Record<string, unknown>>((acc, edge) => {
-                if (!edge.targetHandle) return acc;
+                if (!edge.targetHandle || !edge.sourceHandle) return acc;
 
-                acc[edge.targetHandle] = state[edge.source];
+                acc[edge.targetHandle] = (state[edge.source] as Record<string, unknown>)?.[edge.sourceHandle];
+
                 return acc;
             }, {});
 

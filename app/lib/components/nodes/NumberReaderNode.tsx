@@ -1,5 +1,5 @@
 import {NodeComputeFunction, NodeData} from "@/app/lib/models/node.model";
-import {Node, NodeProps, XYPosition} from "@xyflow/react";
+import {Handle, Node, NodeProps, Position, XYPosition} from "@xyflow/react";
 
 type NumberReaderNodeData = NodeData & { }
 
@@ -11,8 +11,10 @@ export default function NumberReaderNode({
     const value = data.computedState?.['value'] as string;
 
     return (
-        <div>
-            {data.computedState ? (
+        <div className={'p-10 rounded'}>
+            <Handle type="target" position={Position.Left} id="in" />
+
+            {value !== undefined ? (
                 <p>{value}</p>
             ): (
                 <p>No input connected</p>
@@ -41,7 +43,9 @@ export const computeNumberReaderNode: NodeComputeFunction = (
     _node,
     inputs
 ) => {
-    const inValue = inputs['in'] as number;
+    const inValue = inputs['in'] as number | undefined;
+
+    if (inValue === undefined) return {};
 
     return {
         'value': inValue.toString(),

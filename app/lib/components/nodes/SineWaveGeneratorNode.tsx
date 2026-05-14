@@ -1,4 +1,4 @@
-import {Node, NodeProps, XYPosition} from "@xyflow/react";
+import {Handle, Node, NodeProps, Position, XYPosition} from "@xyflow/react";
 import {NodeComputeFunction, NodeData} from "@/app/lib/models/node.model";
 
 type SineWaveGeneratorNodeData = NodeData & {
@@ -13,6 +13,7 @@ export default function SineWaveGeneratorNode({}: NodeProps<Node<SineWaveGenerat
     return (
         <div>
             <h1>Sine Wave Generator</h1>
+            <Handle type={'source'} position={Position.Right} id="out" />
         </div>
     )
 }

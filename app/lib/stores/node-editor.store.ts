@@ -11,6 +11,8 @@ import {
 import {create} from "zustand/react";
 import {GraphState} from "@/app/lib/models/graph-state.model";
 import {computeGraph} from "@/app/lib/utils/graph-compute.util";
+import {createSineWaveGeneratorNode} from "@/app/lib/components/nodes/SineWaveGeneratorNode";
+import {createNumberReaderNode} from "@/app/lib/components/nodes/NumberReaderNode";
 
 interface NodeEditorStore {
     nodes: Node[];
@@ -21,12 +23,16 @@ interface NodeEditorStore {
     onEdgesChange: (changes: EdgeChange[]) => void;
     onConnect: (connection: Connection) => void;
     setNodeValue: (nodeId: string, value: unknown) => void;
+    tick: () => void;
 }
 
 export const useNodeEditorStore = create<NodeEditorStore>(
     (set, get) => (
         {
-            nodes: [],
+            nodes: [
+                createSineWaveGeneratorNode('1', { x: 0, y: 0 }),
+                createNumberReaderNode('2', { x: 0, y: 100 }),
+            ],
             edges: [],
             state: {},
 
@@ -53,6 +59,11 @@ export const useNodeEditorStore = create<NodeEditorStore>(
 
                 if (!result) return;
 
+                set(result);
+            },
+            tick: () => {
+                const result = computeGraph(get().nodes, get().edges, get().state);
+                if (!result) return;
                 set(result);
             },
             setNodeValue: (nodeId, value) => {
