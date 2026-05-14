@@ -2,6 +2,8 @@
 
 import {DefaultEdgeOptions, FitViewOptions, ReactFlow} from "@xyflow/react";
 import {useNodeEditorContext} from "@/app/lib/context/NodeEditorContext";
+import {isConnectionValid} from "@/app/lib/utils/connection.util";
+import {nodeTypeRegistry} from "@/app/lib/constants/node-registry";
 
 export default function NodeEditor() {
     const {
@@ -27,6 +29,10 @@ export default function NodeEditor() {
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
+            isValidConnection={(connection) => {
+                return isConnectionValid(connection, nodes);
+            }}
+            nodeTypes={nodeTypeRegistry}
             fitView
             fitViewOptions={fitViewOptions}
             defaultEdgeOptions={defaultEdgeOptions}
