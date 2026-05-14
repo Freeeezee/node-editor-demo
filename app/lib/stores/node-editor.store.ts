@@ -13,6 +13,7 @@ import {GraphState} from "@/app/lib/models/graph-state.model";
 import {computeGraph} from "@/app/lib/utils/graph-compute.util";
 import {createSineWaveGeneratorNode} from "@/app/lib/components/nodes/SineWaveGeneratorNode";
 import {createNumberReaderNode} from "@/app/lib/components/nodes/NumberReaderNode";
+import {nodeCreatorRegistry} from "@/app/lib/constants/node-registry";
 
 interface NodeEditorStore {
     nodes: Node[];
@@ -24,6 +25,7 @@ interface NodeEditorStore {
     onConnect: (connection: Connection) => void;
     setNodeValue: (nodeId: string, value: unknown) => void;
     tick: () => void;
+    addNode: (type: string) => void;
 }
 
 export const useNodeEditorStore = create<NodeEditorStore>(
@@ -65,6 +67,13 @@ export const useNodeEditorStore = create<NodeEditorStore>(
                 const result = computeGraph(get().nodes, get().edges, get().state);
                 if (!result) return;
                 set(result);
+            },
+            addNode: (type) => {
+                const creator = nodeCreatorRegistry[type];
+                if (!creator) return;
+                const id = `${type}-${Date.now()}`;
+                const position = { x: 100 + Math.random() * 200, y: 100 + Math.random() * 200 };
+                set({ nodes: [...get().nodes, creator.create(id, position)] });
             },
             setNodeValue: (nodeId, value) => {
                 const result = computeGraph(
