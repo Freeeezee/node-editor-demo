@@ -72,7 +72,7 @@ export const useNodeEditorStore = create<NodeEditorStore>(
                 const creator = nodeCreatorRegistry[type];
                 if (!creator) return;
                 const id = `${type}-${Date.now()}`;
-                const position = { x: 100 + Math.random() * 200, y: 100 + Math.random() * 200 };
+                const position = { x: 0, y: 0 };
                 set({ nodes: [...get().nodes, creator.create(id, position)] });
             },
             setNodeValue: (nodeId, value) => {
