@@ -4,6 +4,8 @@ import NodeWrapper from "@/app/lib/components/nodes/NodeWrapper";
 import {useNodeEditorStore} from "@/app/lib/stores/node-editor.store";
 import {Height, GraphicEqRounded, ArrowRightAlt} from "@mui/icons-material";
 import NodeSlider from "@/app/lib/components/shared/NodeSlider";
+import theme from "@/app/theme";
+import NodeHandle from "@/app/lib/components/shared/NodeHandle";
 
 type SineWaveGeneratorNodeData = NodeData & {
     amplitude: number;
@@ -34,6 +36,7 @@ export default function SineWaveGeneratorNode({
                 value={data.amplitude}
                 min={0.5}
                 max={5}
+                step={0.1}
                 onChange={(value) => handleUpdate('amplitude', value)}
                 icon={<Height color={'info'} />}
             />
@@ -41,6 +44,7 @@ export default function SineWaveGeneratorNode({
                 value={data.frequency}
                 min={0.5}
                 max={5}
+                step={0.1}
                 onChange={(value) => handleUpdate('frequency', value)}
                 icon={<GraphicEqRounded color={'info'} />}
             />
@@ -48,10 +52,11 @@ export default function SineWaveGeneratorNode({
                 value={data.phase}
                 min={0}
                 max={5}
+                step={0.1}
                 onChange={(value) => handleUpdate('phase', value)}
                 icon={<ArrowRightAlt color={'info'}  />}
             />
-            <Handle type={'source'} position={Position.Right} id="out" />
+            <NodeHandle type={'source'} position={Position.Right} id="out" />
         </NodeWrapper>
     )
 }

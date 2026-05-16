@@ -76,13 +76,16 @@ export const useNodeEditorStore = create<NodeEditorStore>(
                 set({ nodes: [...get().nodes, creator.create(id, position)] });
             },
             setNodeValue: (nodeId, value) => {
+                const updatedNodes = get().nodes.map(node =>
+                    node.id === nodeId
+                        ? { ...node, data: { ...node.data, ...(value as Record<string, unknown>) } }
+                        : node
+                );
+
                 const result = computeGraph(
-                    get().nodes,
+                    updatedNodes,
                     get().edges,
-                    {
-                        ...get().state,
-                        [nodeId]: value,
-                    },
+                    get().state,
                 );
 
                 if (!result) return;
