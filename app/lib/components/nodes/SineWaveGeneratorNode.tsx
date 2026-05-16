@@ -56,6 +56,7 @@ export default function SineWaveGeneratorNode({
                 onChange={(value) => handleUpdate('phase', value)}
                 icon={<ArrowRightAlt color={'info'}  />}
             />
+            <NodeHandle type={'target'} position={Position.Left} id="time" />
             <NodeHandle type={'source'} position={Position.Right} id="out" />
         </NodeWrapper>
     )
@@ -71,7 +72,8 @@ export const createSineWaveGeneratorNode = (
         type: sineWaveGeneratorNodeType,
         data: {
             handles: {
-                'out': 'number'
+                'time': 'number',
+                'out': 'number',
             },
             amplitude: 1,
             frequency: 1,
@@ -82,10 +84,12 @@ export const createSineWaveGeneratorNode = (
 
 export const computeSineWaveGeneratorNode: NodeComputeFunction = (
     node,
+    inputs,
 ) => {
     const { amplitude, frequency, phase } = node.data as SineWaveGeneratorNodeData;
+    const t = (inputs['time'] as number | undefined) ?? 1;
 
-    const out = amplitude * Math.sin(2 * Math.PI * frequency * new Date().getMilliseconds() + phase);
+    const out = amplitude * Math.sin(2 * Math.PI * frequency * t + phase);
 
     return {
         'out': out,

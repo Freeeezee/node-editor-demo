@@ -11,9 +11,8 @@ import {
 import {create} from "zustand/react";
 import {GraphState} from "@/app/lib/models/graph-state.model";
 import {computeGraph} from "@/app/lib/utils/graph-compute.util";
-import {createSineWaveGeneratorNode} from "@/app/lib/components/nodes/SineWaveGeneratorNode";
-import {createNumberReaderNode} from "@/app/lib/components/nodes/NumberReaderNode";
 import {nodeCreatorRegistry} from "@/app/lib/constants/node-registry";
+import {initialEdges, initialNodes} from "@/app/lib/constants/initial-nodes.const";
 
 interface NodeEditorStore {
     nodes: Node[];
@@ -31,11 +30,8 @@ interface NodeEditorStore {
 export const useNodeEditorStore = create<NodeEditorStore>(
     (set, get) => (
         {
-            nodes: [
-                createSineWaveGeneratorNode('1', { x: 0, y: 0 }),
-                createNumberReaderNode('2', { x: 0, y: 100 }),
-            ],
-            edges: [],
+            nodes: initialNodes,
+            edges: initialEdges,
             state: {},
 
             onNodesChange: (changes) => {

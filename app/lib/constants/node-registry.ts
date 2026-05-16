@@ -11,15 +11,22 @@ import NumberReaderNode, {
     createNumberReaderNode,
     numberReaderNodeType
 } from "@/app/lib/components/nodes/NumberReaderNode";
+import TimeNode, {
+    computeTimeNode,
+    createTimeNode,
+    timeNodeType
+} from "@/app/lib/components/nodes/TimeNode";
 
 export const nodeTypeRegistry: NodeTypes = {
     [sineWaveGeneratorNodeType]: SineWaveGeneratorNode,
     [numberReaderNodeType]: NumberReaderNode,
+    [timeNodeType]: TimeNode,
 }
 
 export const nodeComputeRegistry: Record<string, NodeComputeFunction> = {
     [sineWaveGeneratorNodeType]: computeSineWaveGeneratorNode,
     [numberReaderNodeType]: computeNumberReaderNode,
+    [timeNodeType]: computeTimeNode,
 }
 
 export type NodeCreator = {
@@ -30,4 +37,5 @@ export type NodeCreator = {
 export const nodeCreatorRegistry: Record<string, NodeCreator> = {
     [sineWaveGeneratorNodeType]: { label: 'Sine Wave Generator', create: createSineWaveGeneratorNode },
     [numberReaderNodeType]: { label: 'Number Reader', create: createNumberReaderNode },
+    [timeNodeType]: { label: 'Time', create: createTimeNode },
 }

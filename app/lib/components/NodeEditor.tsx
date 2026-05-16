@@ -39,6 +39,8 @@ export default function NodeEditor() {
                 fitView
                 fitViewOptions={fitViewOptions}
                 defaultEdgeOptions={defaultEdgeOptions}
+                maxZoom={1}
+                minZoom={0.2}
             />
         </>
     )
