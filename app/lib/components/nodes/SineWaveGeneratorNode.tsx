@@ -18,6 +18,7 @@ export const sineWaveGeneratorNodeType = 'sine-wave-generator';
 export default function SineWaveGeneratorNode({
     id,
     data,
+    selected,
 }: NodeProps<Node<SineWaveGeneratorNodeData>>) {
     const setNodeValue = useNodeEditorStore(s => s.setNodeValue);
 
@@ -31,6 +32,7 @@ export default function SineWaveGeneratorNode({
     return (
         <NodeWrapper
             title={'Sine Wave Generator'}
+            selected={selected}
         >
             <NodeSlider
                 value={data.amplitude}

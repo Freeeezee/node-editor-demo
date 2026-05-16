@@ -4,18 +4,22 @@ import {ReactNode} from "react";
 interface NodeWrapperProps {
     title: string;
     children?: ReactNode;
+    selected?: boolean;
 }
 
 export default function NodeWrapper({
     title,
     children,
+    selected,
 }: NodeWrapperProps) {
     return (
         <Paper
             className={'rounded-2xl'}
             elevation={3}
             sx={{
-                borderRadius: 3
+                borderRadius: 3,
+                border: 2,
+                borderColor: selected ? 'primary.main' : 'transparent',
             }}
         >
             <Typography

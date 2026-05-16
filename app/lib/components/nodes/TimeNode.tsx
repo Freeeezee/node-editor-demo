@@ -10,11 +10,12 @@ export const timeNodeType = 'time';
 
 export default function TimeNode({
     data,
+    selected,
 }: NodeProps<Node<TimeNodeData>>) {
     const t = data.computedState?.['time'] as number | undefined;
 
     return (
-        <NodeWrapper title={'Time'}>
+        <NodeWrapper title={'Time'} selected={selected}>
             <Typography variant={'body2'} color={'textSecondary'} className={'text-center'}>
                 {t !== undefined ? `${t.toFixed(2)}s` : '—'}
             </Typography>

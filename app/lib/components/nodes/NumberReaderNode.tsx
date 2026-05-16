@@ -10,11 +10,12 @@ export const numberReaderNodeType = 'number-reader';
 
 export default function NumberReaderNode({
     data,
+    selected,
 }: NodeProps<Node<NumberReaderNodeData>>) {
     const value = data.computedState?.['value'] as string | undefined;
 
     return (
-        <NodeWrapper title={'Number Reader'}>
+        <NodeWrapper title={'Number Reader'} selected={selected}>
             <NodeHandle type="target" position={Position.Left} id="in" />
 
             <Typography
