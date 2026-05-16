@@ -21,12 +21,12 @@ export default function NodeWrapper({
             <Typography
                 variant={'h6'}
                 color={'textPrimary'}
-                className={'p-2 text-center'}
+                className={'px-4 py-2 text-center'}
             >
                 {title}
             </Typography>
             <Divider />
-            <div className={'p-2 flex flex-col gap-3'}>
+            <div className={'px-4 py-2 flex flex-col gap-3'}>
                 {children}
             </div>
         </Paper>
