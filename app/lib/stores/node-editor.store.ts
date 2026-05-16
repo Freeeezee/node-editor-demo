@@ -24,7 +24,7 @@ interface NodeEditorStore {
     onConnect: (connection: Connection) => void;
     setNodeValue: (nodeId: string, value: unknown) => void;
     tick: () => void;
-    addNode: (type: string) => void;
+    addNode: (type: string, position?: { x: number; y: number }) => string | null;
 }
 
 export const useNodeEditorStore = create<NodeEditorStore>(
@@ -64,12 +64,12 @@ export const useNodeEditorStore = create<NodeEditorStore>(
                 if (!result) return;
                 set(result);
             },
-            addNode: (type) => {
+            addNode: (type, position) => {
                 const creator = nodeCreatorRegistry[type];
-                if (!creator) return;
+                if (!creator) return null;
                 const id = `${type}-${Date.now()}`;
-                const position = { x: 0, y: 0 };
-                set({ nodes: [...get().nodes, creator.create(id, position)] });
+                set({ nodes: [...get().nodes, creator.create(id, position ?? { x: 0, y: 0 })] });
+                return id;
             },
             setNodeValue: (nodeId, value) => {
                 const updatedNodes = get().nodes.map(node =>

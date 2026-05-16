@@ -1,6 +1,6 @@
 'use client'
 
-import {useCallback, useEffect, useRef, useState} from "react";
+import {useCallback, useEffect, useRef} from "react";
 import Dialog from "@mui/material/Dialog";
 import InputBase from "@mui/material/InputBase";
 import List from "@mui/material/List";
@@ -9,56 +9,35 @@ import ListItemText from "@mui/material/ListItemText";
 import SearchIcon from "@mui/icons-material/Search";
 import {nodeCreatorRegistry} from "@/app/lib/constants/node-registry";
 import {useNodeEditorStore} from "@/app/lib/stores/node-editor.store";
+import {useFilteredList} from "@/app/lib/hooks/useFilteredList";
 
 interface NodeSearchDialogProps {
     open: boolean;
     onClose: () => void;
+    position?: { x: number; y: number };
+    onNodeAdded?: (nodeId: string, type: string) => void;
 }
 
-const ALL_NODES = Object.entries(nodeCreatorRegistry);
+type NodeEntry = [string, { label: string }];
 
-function filterNodes(query: string) {
-    const q = query.toLowerCase();
-    return ALL_NODES.filter(([, {label}]) => label.toLowerCase().includes(q));
-}
+const ALL_NODES: NodeEntry[] = Object.entries(nodeCreatorRegistry);
+const matchNode = ([, {label}]: NodeEntry, query: string) =>
+    label.toLowerCase().includes(query.toLowerCase());
 
-export default function NodeSearchDialog({open, onClose}: NodeSearchDialogProps) {
-    const [query, setQuery] = useState('');
-    const [focusedIndex, setFocusedIndex] = useState(0);
+export default function NodeSearchDialog({open, onClose, position, onNodeAdded}: NodeSearchDialogProps) {
     const addNode = useNodeEditorStore(s => s.addNode);
     const inputRef = useRef<HTMLInputElement>(null);
-
-    const filtered = filterNodes(query);
-    const clampedIndex = Math.min(focusedIndex, Math.max(0, filtered.length - 1));
+    const list = useFilteredList(ALL_NODES, matchNode);
 
     useEffect(() => {
-        if (!open) return;
-        const id = setTimeout(() => inputRef.current?.focus(), 150);
-        return () => clearTimeout(id);
+        if (open) setTimeout(() => inputRef.current?.focus(), 150);
     }, [open]);
 
-    const handleOpen = () => {
-        setQuery('');
-        setFocusedIndex(0);
-    };
-
-    const selectNode = useCallback((type: string) => {
-        addNode(type);
+    const selectNode = useCallback(([type]: NodeEntry) => {
+        const id = addNode(type, position);
+        if (id) onNodeAdded?.(id, type);
         onClose();
-    }, [addNode, onClose]);
-
-    const handleKeyDown = (e: React.KeyboardEvent) => {
-        if (e.key === 'ArrowDown') {
-            e.preventDefault();
-            setFocusedIndex(i => Math.min(i + 1, filtered.length - 1));
-        } else if (e.key === 'ArrowUp') {
-            e.preventDefault();
-            setFocusedIndex(i => Math.max(i - 1, 0));
-        } else if (e.key === 'Enter' && filtered[clampedIndex]) {
-            e.preventDefault();
-            selectNode(filtered[clampedIndex][0]);
-        }
-    };
+    }, [addNode, onClose, position, onNodeAdded]);
 
     return (
         <Dialog
@@ -66,7 +45,7 @@ export default function NodeSearchDialog({open, onClose}: NodeSearchDialogProps)
             onClose={onClose}
             transitionDuration={120}
             slotProps={{
-                transition: {onEnter: handleOpen},
+                transition: {onEnter: list.reset},
                 paper: {className: 'w-[420px] max-h-[480px] rounded-lg overflow-hidden !bg-none'},
             }}
         >
@@ -76,31 +55,28 @@ export default function NodeSearchDialog({open, onClose}: NodeSearchDialogProps)
                     inputRef={inputRef}
                     fullWidth
                     placeholder="Search nodes…"
-                    value={query}
-                    onChange={e => {
-                        setQuery(e.target.value);
-                        setFocusedIndex(0);
-                    }}
-                    onKeyDown={handleKeyDown}
+                    value={list.query}
+                    onChange={e => list.setQuery(e.target.value)}
+                    onKeyDown={e => list.handleKeyDown(e, selectNode)}
                     className="text-sm"
                 />
             </div>
             <hr className="border-gray-200" />
             <List disablePadding className="max-h-96 overflow-y-auto">
-                {filtered.length === 0 ? (
+                {list.filtered.length === 0 ? (
                     <p className="py-6 text-center text-sm text-gray-400">No nodes found</p>
-                ) : filtered.map(([type, {label}], i) => (
+                ) : list.filtered.map(([type, {label}], i) => (
                     <ListItemButton
                         key={type}
-                        selected={i === clampedIndex}
-                        onClick={() => selectNode(type)}
-                        onMouseMove={() => setFocusedIndex(i)}
+                        selected={i === list.focusedIndex}
+                        onClick={() => selectNode([type, {label}])}
+                        onMouseMove={() => list.setFocusedIndex(i)}
                         className="px-4 py-2.5"
                     >
                         <ListItemText
                             primary={label}
                             slotProps={{
-                                primary: {className: i === clampedIndex ? 'font-semibold' : ''},
+                                primary: {className: i === list.focusedIndex ? 'font-semibold' : ''},
                             }}
                         />
                     </ListItemButton>
