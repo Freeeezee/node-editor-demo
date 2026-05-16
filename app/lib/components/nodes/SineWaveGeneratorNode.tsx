@@ -1,5 +1,9 @@
 import {Handle, Node, NodeProps, Position, XYPosition} from "@xyflow/react";
 import {NodeComputeFunction, NodeData} from "@/app/lib/models/node.model";
+import NodeWrapper from "@/app/lib/components/nodes/NodeWrapper";
+import {useNodeEditorStore} from "@/app/lib/stores/node-editor.store";
+import {Height, GraphicEqRounded, ArrowRightAlt} from "@mui/icons-material";
+import NodeSlider from "@/app/lib/components/shared/NodeSlider";
 
 type SineWaveGeneratorNodeData = NodeData & {
     amplitude: number;
@@ -9,12 +13,46 @@ type SineWaveGeneratorNodeData = NodeData & {
 
 export const sineWaveGeneratorNodeType = 'sine-wave-generator';
 
-export default function SineWaveGeneratorNode({}: NodeProps<Node<SineWaveGeneratorNodeData>>) {
+export default function SineWaveGeneratorNode({
+    id,
+    data,
+}: NodeProps<Node<SineWaveGeneratorNodeData>>) {
+    const setNodeValue = useNodeEditorStore(s => s.setNodeValue);
+
+    const handleUpdate = (key: keyof SineWaveGeneratorNodeData, value: number) => {
+        setNodeValue(id, {
+            ...data,
+            [key]: value,
+        });
+    }
+
     return (
-        <div>
-            <h1>Sine Wave Generator</h1>
+        <NodeWrapper
+            title={'Sine Wave Generator'}
+        >
+            <NodeSlider
+                value={data.amplitude}
+                min={0.5}
+                max={5}
+                onChange={(value) => handleUpdate('amplitude', value)}
+                icon={<Height color={'info'} />}
+            />
+            <NodeSlider
+                value={data.frequency}
+                min={0.5}
+                max={5}
+                onChange={(value) => handleUpdate('frequency', value)}
+                icon={<GraphicEqRounded color={'info'} />}
+            />
+            <NodeSlider
+                value={data.phase}
+                min={0}
+                max={5}
+                onChange={(value) => handleUpdate('phase', value)}
+                icon={<ArrowRightAlt color={'info'}  />}
+            />
             <Handle type={'source'} position={Position.Right} id="out" />
-        </div>
+        </NodeWrapper>
     )
 }
 
