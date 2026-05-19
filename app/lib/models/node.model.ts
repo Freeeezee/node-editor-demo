@@ -2,7 +2,7 @@ import {Node} from "@xyflow/react";
 
 export type Signal = (t: number) => number;
 
-type HandleOutputType = 'number' | 'string' | 'signal';
+export type HandleOutputType = 'number' | 'signal';
 
 export type NodeData = {
     handles: Record<string, HandleOutputType>;
