@@ -2,7 +2,7 @@ import {Node, NodeProps, Position, XYPosition} from "@xyflow/react";
 import {NodeComputeFunction, NodeData, Signal} from "@/app/lib/models/node.model";
 import NodeWrapper from "@/app/lib/components/nodes/NodeWrapper";
 import {useNodeEditorStore} from "@/app/lib/stores/node-editor.store";
-import {GraphicEqRounded, ArrowRightAlt} from "@mui/icons-material";
+import {GraphicEqRounded, ArrowRightAlt, Height} from "@mui/icons-material";
 import NodeSlider from "@/app/lib/components/shared/NodeSlider";
 import NodeHandle from "@/app/lib/components/shared/NodeHandle";
 
@@ -39,7 +39,7 @@ export default function SineWaveGeneratorNode({
                 max={5}
                 step={0.1}
                 onChange={(value) => handleUpdate('amplitude', value)}
-                icon={<GraphicEqRounded color={'info'} />}
+                icon={<Height color={'info'} />}
                 handle={{
                     nodeId: id,
                     handleId: 'amplitude',

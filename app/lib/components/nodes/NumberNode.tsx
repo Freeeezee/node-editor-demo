@@ -42,12 +42,12 @@ export default function NumberNode({
     )
 }
 
-export const createNumberNode = (id: string, position: { x: number; y: number; }): Node<NumberNodeData> => ({
+export const createNumberNode = (id: string, position: { x: number; y: number; }, initialValue = 1): Node<NumberNodeData> => ({
     id,
     position,
     type: numberNodeType,
     data: {
-        value: 1,
+        value: initialValue,
         handles: {
             'out': 'number',
         }
