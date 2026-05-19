@@ -8,10 +8,15 @@ export const isConnectionValid = (
     const source = nodes.find(n => n.id === connection.source);
     const target = nodes.find(n => n.id === connection.target);
 
-    const sourceType = getHandleType(source, connection.sourceHandle);
-    const targetType = getHandleType(target, connection.targetHandle);
+    let sourceType = getHandleType(source, connection.sourceHandle);
+    let targetType = getHandleType(target, connection.targetHandle);
 
-    return sourceType === targetType;
+    if (!sourceType || !targetType) return false;
+
+    if (!Array.isArray(sourceType)) sourceType = [sourceType];
+    if (!Array.isArray(targetType)) targetType = [targetType];
+
+    return sourceType.some(type => targetType.includes(type));
 }
 
 const getHandleType = (

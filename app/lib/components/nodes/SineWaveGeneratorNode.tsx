@@ -2,10 +2,9 @@ import {Node, NodeProps, Position, XYPosition} from "@xyflow/react";
 import {NodeComputeFunction, NodeData, Signal} from "@/app/lib/models/node.model";
 import NodeWrapper from "@/app/lib/components/nodes/NodeWrapper";
 import {useNodeEditorStore} from "@/app/lib/stores/node-editor.store";
-import {Height, GraphicEqRounded, ArrowRightAlt} from "@mui/icons-material";
+import {GraphicEqRounded, ArrowRightAlt} from "@mui/icons-material";
 import NodeSlider from "@/app/lib/components/shared/NodeSlider";
 import NodeHandle from "@/app/lib/components/shared/NodeHandle";
-import {Typography} from "@mui/material";
 
 type SineWaveGeneratorNodeData = NodeData & {
     amplitude: number;
@@ -88,7 +87,7 @@ export const createSineWaveGeneratorNode = (
         type: sineWaveGeneratorNodeType,
         data: {
             handles: {
-                'amplitude': 'number',
+                'amplitude': ['number'],
                 'frequency': 'number',
                 'phase': 'number',
                 'out': 'signal',

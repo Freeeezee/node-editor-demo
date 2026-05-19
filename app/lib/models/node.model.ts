@@ -5,7 +5,7 @@ export type Signal = (t: number) => number;
 export type HandleOutputType = 'number' | 'signal';
 
 export type NodeData = {
-    handles: Record<string, HandleOutputType>;
+    handles: Record<string, HandleOutputType | HandleOutputType[]>;
     computedState?: Record<string, unknown>;
 }
 
