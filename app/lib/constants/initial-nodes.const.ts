@@ -3,6 +3,7 @@ import {createChartNode} from "@/app/lib/components/nodes/ChartNode";
 import {Edge, Node} from "@xyflow/react";
 import {createNumberNode} from "@/app/lib/components/nodes/NumberNode";
 import {createMathNode} from "@/app/lib/components/nodes/MathNode";
+import {createNumberReaderNode} from "@/app/lib/components/nodes/NumberReaderNode";
 
 export const initialNodes: Node[] = [
     createNumberNode('0', { x: -400, y: -300}, 0.5),
@@ -12,6 +13,7 @@ export const initialNodes: Node[] = [
     createSineWaveGeneratorNode('5', { x: 100, y: 100 }),
     createMathNode('4', { x: 500, y: -100}),
     createChartNode('6', { x: 800, y: 0 }),
+    createNumberReaderNode('7', { x: 100, y: -300 }),
 ];
 
 export const initialEdges: Edge[] = [
@@ -64,4 +66,11 @@ export const initialEdges: Edge[] = [
         target: '6',
         targetHandle: 'in',
     },
+    {
+        id: '3-7',
+        source: '3',
+        sourceHandle: 'out',
+        target: '7',
+        targetHandle: 'in',
+    }
 ];
