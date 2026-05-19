@@ -1,3 +1,3 @@
-# Time Spent So Far
+# Time Spent
 
-6h 15m
+7h 30m
