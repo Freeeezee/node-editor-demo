@@ -1,6 +1,6 @@
 'use client'
 
-import React, {createContext, useContext, useEffect} from "react";
+import React, {createContext, useContext} from "react";
 import {
     Edge,
     Node,
@@ -20,12 +20,6 @@ interface NodeEditorProviderProps {
 
 export function NodeEditorProvider({children}: NodeEditorProviderProps) {
     const value = useNodeEditorContextValue();
-    const tick = useNodeEditorStore(s => s.tick);
-
-    useEffect(() => {
-        const id = setInterval(tick, 50);
-        return () => clearInterval(id);
-    }, [tick]);
 
     return (
         <NodeEditorContext.Provider value={value}>

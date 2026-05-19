@@ -14,6 +14,8 @@ import {computeGraph} from "@/app/lib/utils/graph-compute.util";
 import {nodeCreatorRegistry} from "@/app/lib/constants/node-registry";
 import {initialEdges, initialNodes} from "@/app/lib/constants/initial-nodes.const";
 
+const initialState = computeGraph(initialNodes, initialEdges, {});
+
 interface NodeEditorStore {
     nodes: Node[];
     edges: Edge[];
@@ -23,16 +25,15 @@ interface NodeEditorStore {
     onEdgesChange: (changes: EdgeChange[]) => void;
     onConnect: (connection: Connection) => void;
     setNodeValue: (nodeId: string, value: unknown) => void;
-    tick: () => void;
     addNode: (type: string, position?: { x: number; y: number }) => string | null;
 }
 
 export const useNodeEditorStore = create<NodeEditorStore>(
     (set, get) => (
         {
-            nodes: initialNodes,
-            edges: initialEdges,
-            state: {},
+            nodes: initialState?.nodes ?? initialNodes,
+            edges: initialState?.edges ?? initialEdges,
+            state: initialState?.graphState ?? {},
 
             onNodesChange: (changes) => {
                 set({nodes: applyNodeChanges(changes, get().nodes)});
@@ -57,11 +58,6 @@ export const useNodeEditorStore = create<NodeEditorStore>(
 
                 if (!result) return;
 
-                set(result);
-            },
-            tick: () => {
-                const result = computeGraph(get().nodes, get().edges, get().state);
-                if (!result) return;
                 set(result);
             },
             addNode: (type, position) => {

@@ -1,5 +1,5 @@
 import {NodeComputeFunction, NodeData} from "@/app/lib/models/node.model";
-import {Handle, Node, NodeProps, Position, XYPosition} from "@xyflow/react";
+import {Node, NodeProps, Position, XYPosition} from "@xyflow/react";
 import NodeWrapper from "@/app/lib/components/nodes/NodeWrapper";
 import NodeHandle from "@/app/lib/components/shared/NodeHandle";
 import {Typography} from "@mui/material";

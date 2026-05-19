@@ -1,10 +1,9 @@
-import {Handle, Node, NodeProps, Position, XYPosition} from "@xyflow/react";
-import {NodeComputeFunction, NodeData} from "@/app/lib/models/node.model";
+import {Node, NodeProps, Position, XYPosition} from "@xyflow/react";
+import {NodeComputeFunction, NodeData, Signal} from "@/app/lib/models/node.model";
 import NodeWrapper from "@/app/lib/components/nodes/NodeWrapper";
 import {useNodeEditorStore} from "@/app/lib/stores/node-editor.store";
 import {Height, GraphicEqRounded, ArrowRightAlt} from "@mui/icons-material";
 import NodeSlider from "@/app/lib/components/shared/NodeSlider";
-import theme from "@/app/theme";
 import NodeHandle from "@/app/lib/components/shared/NodeHandle";
 
 type SineWaveGeneratorNodeData = NodeData & {
@@ -58,7 +57,6 @@ export default function SineWaveGeneratorNode({
                 onChange={(value) => handleUpdate('phase', value)}
                 icon={<ArrowRightAlt color={'info'}  />}
             />
-            <NodeHandle type={'target'} position={Position.Left} id="time" />
             <NodeHandle type={'source'} position={Position.Right} id="out" />
         </NodeWrapper>
     )
@@ -74,8 +72,7 @@ export const createSineWaveGeneratorNode = (
         type: sineWaveGeneratorNodeType,
         data: {
             handles: {
-                'time': 'number',
-                'out': 'number',
+                'out': 'signal',
             },
             amplitude: 1,
             frequency: 1,
@@ -86,14 +83,11 @@ export const createSineWaveGeneratorNode = (
 
 export const computeSineWaveGeneratorNode: NodeComputeFunction = (
     node,
-    inputs,
 ) => {
     const { amplitude, frequency, phase } = node.data as SineWaveGeneratorNodeData;
-    const t = (inputs['time'] as number | undefined) ?? 1;
 
-    const out = amplitude * Math.sin(2 * Math.PI * frequency * t + phase);
+    const signal: Signal = (t) =>
+        amplitude * Math.sin(2 * Math.PI * frequency * t + phase);
 
-    return {
-        'out': out,
-    }
+    return { 'out': signal };
 }
