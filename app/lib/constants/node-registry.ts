@@ -16,17 +16,20 @@ import ChartNode, {
     createChartNode,
     chartNodeType
 } from "@/app/lib/components/nodes/ChartNode";
+import NumberNode, {computeNumberNode, createNumberNode, numberNodeType} from "@/app/lib/components/nodes/NumberNode";
 
 export const nodeTypeRegistry: NodeTypes = {
     [sineWaveGeneratorNodeType]: SineWaveGeneratorNode,
     [numberReaderNodeType]: NumberReaderNode,
     [chartNodeType]: ChartNode,
+    [numberNodeType]: NumberNode,
 }
 
 export const nodeComputeRegistry: Record<string, NodeComputeFunction> = {
     [sineWaveGeneratorNodeType]: computeSineWaveGeneratorNode,
     [numberReaderNodeType]: computeNumberReaderNode,
     [chartNodeType]: computeChartNode,
+    [numberNodeType]: computeNumberNode,
 }
 
 export type NodeCreator = {
@@ -38,4 +41,5 @@ export const nodeCreatorRegistry: Record<string, NodeCreator> = {
     [sineWaveGeneratorNodeType]: { label: 'Sine Wave Generator', create: createSineWaveGeneratorNode },
     [numberReaderNodeType]: { label: 'Number Reader', create: createNumberReaderNode },
     [chartNodeType]: { label: 'Chart', create: createChartNode },
+    [numberNodeType]: { label: 'Number', create: createNumberNode },
 }

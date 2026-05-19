@@ -8,6 +8,7 @@ interface NodeSliderProps {
     onChange: (value: number) => void;
     icon?: ReactNode;
     step?: number;
+    handle?: ReactNode;
 }
 
 export default function NodeSlider({
@@ -17,7 +18,10 @@ export default function NodeSlider({
     min,
     max,
     step = 0.5,
+    handle,
 }: NodeSliderProps) {
+
+
     const handleBlur = () => {
         if (value < min) {
             onChange(min);
@@ -27,7 +31,8 @@ export default function NodeSlider({
     };
 
     return (
-        <div className={'flex flex-row gap-5 items-center nodrag'}>
+        <div className={'relative flex flex-row gap-5 items-center nodrag'}>
+            {handle}
             {icon}
             <Slider
                 value={value}

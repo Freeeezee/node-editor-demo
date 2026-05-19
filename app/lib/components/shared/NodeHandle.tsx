@@ -1,7 +1,7 @@
 import {Handle, HandleProps} from "@xyflow/react";
 import {Circle} from "@mui/icons-material";
 
-export default function NodeHandle(props: HandleProps) {
+export default function NodeHandle({style, ...props}: HandleProps) {
     return (
         <Handle
             {...props}
@@ -10,6 +10,7 @@ export default function NodeHandle(props: HandleProps) {
                 border: 'none',
                 width: '1em',
                 height: '1em',
+                ...style,
             }}
         >
             <Circle
