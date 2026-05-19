@@ -1,5 +1,8 @@
 import {ReactNode} from "react";
-import {Input, Slider} from "@mui/material";
+import {Input, Slider, Typography} from "@mui/material";
+import {useNodeEditorStore} from "@/app/lib/stores/node-editor.store";
+import {Position} from "@xyflow/react";
+import NodeHandle from "@/app/lib/components/shared/NodeHandle";
 
 interface NodeSliderProps {
     value: number;
@@ -8,7 +11,11 @@ interface NodeSliderProps {
     onChange: (value: number) => void;
     icon?: ReactNode;
     step?: number;
-    handle?: ReactNode;
+    handle?: {
+        nodeId: string;
+        handleId: string;
+        computedState?: string;
+    };
 }
 
 export default function NodeSlider({
@@ -20,7 +27,11 @@ export default function NodeSlider({
     step = 0.5,
     handle,
 }: NodeSliderProps) {
+    const edges = useNodeEditorStore(s => s.edges);
 
+    const isConnected = !!handle && edges.some(
+        e => e.target === handle.nodeId && e.targetHandle === handle.handleId
+    );
 
     const handleBlur = () => {
         if (value < min) {
@@ -32,28 +43,36 @@ export default function NodeSlider({
 
     return (
         <div className={'relative flex flex-row gap-5 items-center nodrag'}>
-            {handle}
+            {handle && (
+                <NodeHandle type={'target'} position={Position.Left} id={handle.handleId} style={{top: '50%', left: '-1.15rem'}} />
+            )}
             {icon}
-            <Slider
-                value={value}
-                min={min}
-                max={max}
-                onChange={(_e, value) => onChange(value)}
-                className={'grow min-w-25'}
-                step={step}
-            />
-            <Input
-                value={value}
-                size="small"
-                onBlur={handleBlur}
-                onChange={(e) => onChange(e.target.value === '' ? 0 : Number(e.target.value))}
-                inputProps={{
-                    min,
-                    max,
-                    type: 'number',
-                }}
-                className={'w-20'}
-            />
+            {isConnected ? (
+                <Typography variant={'body1'} color={'textPrimary'}>{handle.computedState ?? value}</Typography>
+            ) : (
+                <>
+                    <Slider
+                        value={value}
+                        min={min}
+                        max={max}
+                        onChange={(_e, value) => onChange(value)}
+                        className={'grow min-w-25'}
+                        step={step}
+                    />
+                    <Input
+                        value={value}
+                        size="small"
+                        onBlur={handleBlur}
+                        onChange={(e) => onChange(e.target.value === '' ? 0 : Number(e.target.value))}
+                        inputProps={{
+                            min,
+                            max,
+                            type: 'number',
+                        }}
+                        className={'w-20'}
+                    />
+                </>
+            )}
         </div>
     )
 }
